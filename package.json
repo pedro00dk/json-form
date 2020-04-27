@@ -1,0 +1,30 @@
+{
+    "name": "json-form",
+    "author": {
+        "name": "Pedro Henrique",
+        "email": "pedro00dk@gmail.com"
+    },
+    "license": "MIT",
+    "main": "./public/index.html",
+    "devDependencies": {
+        "parcel-bundler": "latest",
+        "prettier": "latest",
+        "typescript": "3.8.3"
+    },
+    "dependencies": {
+        "@babel/polyfill": "7.8.7",
+        "@types/react": "16.9.34",
+        "@types/react-dom": "16.9.6",
+        "emotion": "10.0.27",
+        "http-server": "0.12.1",
+        "react": "16.13.1",
+        "react-dom": "16.13.1",
+        "react-markdown": "4.3.1"
+    },
+    "scripts": {
+        "format": "shopt -s extglob globstar && prettier --config ./.prettierrc.json -c --write ./src/**/*.js* && shopt -u extglob globstar",
+        "build": "parcel build --no-cache --no-source-maps -d ./dist/build -- \"$npm_package_main\"",
+        "start": "{ [ \"$PORT\" ] || PORT=1234; } && npm run build && http-server -p \"$PORT\" -- ./dist/build",
+        "start:dev": "{ [ \"$PORT\" ] || PORT=1234; } && parcel serve --no-cache -d ./dist/ -p \"$PORT\" -- \"$npm_package_main\""
+    }
+}

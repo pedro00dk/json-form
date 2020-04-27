@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "allowSyntheticDefaultImports": true,
+        "jsx": "react",
+        "lib": ["dom", "es2020"],
+        "moduleResolution": "node",
+        "newLine": "LF",
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "outDir": "./dist/",
+        "sourceMap": true,
+        "target": "es2019"
+    }
+}
