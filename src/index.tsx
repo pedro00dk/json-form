@@ -1,7 +1,7 @@
 import '@babel/polyfill' // regeneratorRuntime
 import React from 'react'
 import ReactDom from 'react-dom'
-import { Form } from './Form'
+import { Form } from './components/Form'
 
 const init = async () => {
     const formAddress = window.location.hash.substring(1)
