@@ -1,7 +1,7 @@
 import { css } from 'emotion'
 import React from 'react'
-import { Question } from '../Form'
 import * as spec from '../spec'
+import { Question } from './Question'
 
 const classes = {
     container: 'd-flex flex-column',
