@@ -1,0 +1,16 @@
+### Visual Studio Code
+**/.vscode/*
+!**/.vscode/launch.json
+!**/.vscode/tasks.json
+#!.vscode/settings.json
+#!.vscode/extensions.json
+
+### NodeJS
+node_modules/
+package-lock.json
+# parcel
+.cache
+dist/
+#
+coverage
+.npm
