@@ -1,4 +1,15 @@
 export type Form = {
+    submission: {
+        url: string
+        uniqueAnswer?: string
+    }
+    sessionOrder: {
+        static?: number[]
+        dynamic?: {
+            url: string
+            orders: number[][]
+        }
+    }
     sessions: Session[]
 }
 
