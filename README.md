@@ -29,3 +29,5 @@ The submissions can be accessed in the `storage` menu.
 ### Creating a form
 
 The `gist.github` tool is recommended to store the json form specification.
+
+The [json schema file](/schema/schema.json) can be used to make easier to build the specification.
