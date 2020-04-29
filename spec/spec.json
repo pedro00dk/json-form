@@ -7,14 +7,17 @@
     "sessionOrder": {
         "dynamic": {
             "url": "https://us-central1-json-form-63252.cloudfunctions.net/getSessionOrder",
-            "orders": [[0, 1], [1, 0], [0]]
+            "orders": [
+                [0, 1],
+                [1, 0]
+            ]
         }
     },
     "sessions": [
         {
             "timeLimit": 180,
             "questions": [
-                { 
+                {
                     "content": [
                         { "text": "# Test form\n## Session 1" },
                         { "text": "#### This form has the email as an unique field." },
