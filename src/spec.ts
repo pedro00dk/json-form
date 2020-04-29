@@ -3,7 +3,7 @@ export type Form = {
         url: string
         uniqueAnswer?: string
     }
-    sessionOrder: {
+    sessionOrder?: {
         static?: number[]
         dynamic?: {
             url: string
