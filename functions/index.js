@@ -88,15 +88,17 @@ exports.acceptSubmission = functions.https.onRequest((request, response) => {
         validateSubmission(submission)
         const isUnique = await checkUniqueSubmission(submission)
         await db.collection(isUnique ? 'submissions' : 'duplicates').add(submission)
-        response.send(
-            `Submission accepted.\n${
-                !isUnique
-                    ? 'A previous submission with the same answer for [' +
-                      submission.uniqueAnswer +
-                      '] was already received. This submission is being saved as a duplicate.'
-                    : ''
-            }`
-        )
+        response
+            .status(200)
+            .send(
+                `Submission accepted.\n${
+                    !isUnique
+                        ? 'A previous submission with the same answer for [' +
+                          submission.uniqueAnswer +
+                          '] was already received. This submission is being saved as a duplicate.'
+                        : ''
+                }`
+            )
     })
 })
 
@@ -129,7 +131,11 @@ const getLessFrequentSessionOrder = async sessionOrders => {
 
     let lessFrequent = 0
     for (let i = 0; i < sessionOrderFrequencies.length; i++)
-        if (sessionOrderFrequencies[i] < sessionOrderFrequencies[lessFrequent]) lessFrequent = i
+        if (
+            sessionOrderFrequencies[i] < sessionOrderFrequencies[lessFrequent] ||
+            (sessionOrderFrequencies[i] === sessionOrderFrequencies[lessFrequent] && Math.random() < 0.5)
+        )
+            lessFrequent = i
 
     const lessFrequentOrder = sessionOrders[lessFrequent] ? sessionOrders[lessFrequent] : []
     return lessFrequentOrder
