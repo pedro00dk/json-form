@@ -31,6 +31,7 @@ The submissions can be accessed in the `storage` menu.
 The `gist.github` tool is recommended to store the json form specification.
 
 The [json schema file](/schema/schema.json) can be used to make easier to build the specification.
+Many tools also provide json schema verification against yaml files.
 
 ### Publishing
 
@@ -39,5 +40,8 @@ To access your form you only need to append it to the json-form url, where the c
 
 `https://pedro00dk.github.io/json-form/#[YOUR_SPECIFICATION_ADDRESS_HERE]`
 
-Example with the toy specification:
+Toy Example using json:
 https://pedro00dk.github.io/json-form/#https://raw.githubusercontent.com/pedro00dk/json-form/master/spec/spec.json
+
+Toy Example using yaml:
+https://pedro00dk.github.io/json-form/#https://raw.githubusercontent.com/pedro00dk/json-form/master/spec/spec.yaml

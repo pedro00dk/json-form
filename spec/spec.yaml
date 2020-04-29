@@ -1,3 +1,4 @@
+$schema: https://raw.githubusercontent.com/pedro00dk/json-form/master/schema/schema.json
 submission:
   url: https://us-central1-json-form-63252.cloudfunctions.net/acceptSubmission
   uniqueAnswer: email
@@ -14,21 +15,23 @@ sessions:
     questions:
       - content:
           - text: |
-              \# Test form
+              # Test form
               ## Session 1
-          - text: \#### This form has the email as an unique field.
-          - text: This means that submissions with repeated email will be recorded in a duplicates collection.
+          - text: |
+              #### This form has the email as an unique field.
+          - text: |
+              This means that submissions with repeated email will be recorded in a duplicates collection.
           - answer:
               id: email
               required: true
               type:
                 short:
                   placeholder: your email
-          - text: \#### A single question may collect multiple data
+          - text: |
+              #### A single question may collect multiple data
       - content:
           - text: |
               ## Another question
-
               #### Supported answer formats
               - Short text
               - Long text
@@ -43,7 +46,8 @@ sessions:
                     - "bad"
                     - "good"
                     - "regular"
-          - text: \#### You can change the amount of options.
+          - text: |
+              #### You can change the amount of options.
           - answer:
               id: likert
               required: true
@@ -58,7 +62,8 @@ sessions:
               ## Session 3
               ### You can import videos from youtube.
           - video: https://www.youtube.com/embed/Uhhw6Jw295o
-          - text: \##### And put around the text or questions.
+          - text: |
+              ##### And put around the text or questions.
           - answer:
               id: age
               required: true
@@ -66,4 +71,5 @@ sessions:
                 short:
                   placeholder: your age
       - content:
-          - text: \## This section has no time limit, but the elapsed time is still recorded.
+          - text: |
+              ## This section has no time limit, but the elapsed time is still recorded.
