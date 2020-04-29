@@ -17,13 +17,17 @@ const enableCors = (request, response, origin = '*', methods = 'GET, POST') => {
     response.set('Access-Control-Allow-Methods', methods)
     if (request.method === 'OPTIONS') {
         response.set('Access-Control-Allow-Headers', 'Content-Type')
+        response.set('Access-Control-Allow-Credentials', 'true')
         response.set('Access-Control-Max-Age', '3600')
+        response.status(200).send()
+        return true
     }
+    return false
 }
 
 exports.listSubmissions = functions.https.onRequest((request, response) => {
     respondErrors(request, response, async () => {
-        enableCors(request, response, '*', 'GET')
+        if (enableCors(request, response, '*', 'GET')) return
         const collection = await db.collection('submissions').get()
         const documents = {}
         collection.forEach(document => (documents[document.id] = document.data()))
@@ -79,7 +83,7 @@ const checkUniqueSubmission = async submission => {
 
 exports.acceptSubmission = functions.https.onRequest((request, response) => {
     respondErrors(request, response, async () => {
-        enableCors(request, response, '*', 'POST')
+        if (enableCors(request, response, '*', 'POST')) return
         const submission = request.body
         validateSubmission(submission)
         const isUnique = await checkUniqueSubmission(submission)
@@ -133,7 +137,7 @@ const getLessFrequentSessionOrder = async sessionOrders => {
 
 exports.getSessionOrder = functions.https.onRequest((request, response) =>
     respondErrors(request, response, async () => {
-        enableCors(request, response, '*', 'POST')
+        if (enableCors(request, response, '*', 'POST')) return
         const orders = request.body
         validateSessionOrder(orders)
         response.status(200).send(await getLessFrequentSessionOrder(orders))
