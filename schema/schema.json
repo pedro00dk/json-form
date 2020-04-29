@@ -1,0 +1,149 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "properties": {
+        "submission": { "$ref": "definitions/submission" },
+        "sessionOrder": { "$ref": "definitions/sessionOrder" },
+        "sessions": {
+            "description": "The list of sessions that compose the form.",
+            "type": "array",
+            "items": { "$ref": "definitions/session" }
+        }
+    },
+    "required": ["submission", "sessions"],
+    "definitions": {
+        "submission": {
+            "description": "Provide the information to submit the form data.",
+            "properties": {
+                "url": {
+                    "description": "The url of which the collected form data will be submitted to.",
+                    "type": "string"
+                },
+                "uniqueAnswer": {
+                    "description": "A unique answer id to decide if the form is a duplicate. (optional)",
+                    "type": "string"
+                }
+            },
+            "required": ["url"]
+        },
+        "sessionOrder": {
+            "description": "Enable alternative session orders to be presented. (optional)",
+            "properties": {
+                "static": {
+                    "description": "List of indices of sessions to be presented in that order. (optional)",
+                    "type": "array",
+                    "items": { "type": "number" }
+                },
+                "dynamic": {
+                    "description": "Fetch the session order on the fly from the provided url. (optional)",
+                    "properties": {
+                        "url": {
+                            "description": "The url to get the session order.",
+                            "type": "string"
+                        },
+                        "uniqueAnswer": {
+                            "description": "The list of orders that are expected to be returned. (optional)",
+                            "type": "string"
+                        }
+                    },
+                    "required": ["url"]
+                }
+            }
+        },
+        "session": {
+            "description": "A session is a page of the form. It contains questions and can show elapsed time if requested.",
+            "properties": {
+                "timeLimit": {
+                    "description": "Show the remaining time the respondent has to finish the session, the respondent can still answer if he/she overtimes. (optional)",
+                    "type": "number"
+                },
+                "questions": {
+                    "description": "The questions that compose a session.",
+                    "type": "array",
+                    "items": { "$ref": "definitions/question" }
+                }
+            }
+        },
+        "question": {
+            "description": "A may contain text, videos and elements to record respondents answers.",
+            "properties": {
+                "contents": {
+                    "description": "The collection of elements that compose a question.",
+                    "type": "array",
+                    "items": { "$ref": "definitions/content" }
+                }
+            }
+        },
+        "content": {
+            "description": "A unit of content that composes a question. It can be markdown text, a video or a answer element.",
+            "oneOf": [
+                { "properties": { "text": { "description": "A unit of markdown text.", "type": "string" } } },
+                { "properties": { "video": { "description": "A unit of video.", "type": "string" } } },
+                { "properties": { "answer": { "$ref": "definitions/answer" } } }
+            ]
+        },
+        "answer": {
+            "description": "An answer element that will be collected and submitted by the form.",
+            "properties": {
+                "id": {
+                    "description": "The answer id, it must be unique among all other answers of all questions and sessions.",
+                    "type": "string"
+                },
+                "required": {
+                    "description": "Indicates if the the answer element must be answered to proceed.",
+                    "type": "boolean"
+                },
+                "type": {
+                    "description": "The type of answer to be rendered.",
+                    "oneOf": [
+                        { "properties": { "short": { "$ref": "definitions/shortAnswer" } } },
+                        { "properties": { "long": { "$ref": "definitions/longAnswer" } } },
+                        { "properties": { "multi": { "$ref": "definitions/multiAnswer" } } },
+                        { "properties": { "likert": { "$ref": "definitions/likertAnswer" } } }
+                    ]
+                }
+            }
+        },
+        "shortAnswer": {
+            "description": "Short answer, accepts a single line of text.",
+            "properties": {
+                "placeholder": { "description": "The placeholder message", "type": "string" }
+            }
+        },
+        "longAnswer": {
+            "description": "Long answer, accepts multiple line of text.",
+            "properties": {
+                "placeholder": { "description": "The placeholder message", "type": "string" }
+            }
+        },
+        "multiAnswer": {
+            "description": "A list of options to be chosen.",
+            "properties": {
+                "options": {
+                    "description": "The options that can be chosen",
+                    "type": "array",
+                    "items": {
+                        "description": "A single option.",
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "likertAnswer": {
+            "description": "A list of numbered options to be chosen with only the first and last elements labeled.",
+            "properties": {
+                "first": {
+                    "description": "The first label",
+                    "type": "string"
+                },
+                "last": {
+                    "description": "The last label",
+                    "type": "string"
+                },
+                "size": {
+                    "description": "The amount of options",
+                    "type": "number"
+                }
+            }
+        }
+    }
+}
