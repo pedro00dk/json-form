@@ -21,7 +21,8 @@
         "http-server": "0.12.1",
         "react": "16.13.1",
         "react-dom": "16.13.1",
-        "react-markdown": "4.3.1"
+        "react-markdown": "4.3.1",
+        "yaml": "1.9.2"
     },
     "scripts": {
         "format": "shopt -s extglob globstar && prettier --config ./.prettierrc.json -c --write ./src/**/*.js* && shopt -u extglob globstar",
@@ -30,6 +31,6 @@
         "start:dev": "{ [ \"$PORT\" ] || PORT=1234; } && parcel serve --no-cache -d ./dist/ -p \"$PORT\" -- \"$npm_package_main\"",
         "//": "//",
         "firebase-login": "firebase login --reauth",
-        "firebase-deploy": "firebase deploy"
+        "firebase-deploy": "firebase login && firebase deploy"
     }
 }
