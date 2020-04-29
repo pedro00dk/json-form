@@ -1,0 +1,91 @@
+{
+    "submission": {
+        "url": "https://us-central1-json-form-63252.cloudfunctions.net/acceptSubmission",
+        "uniqueAnswer": "email"
+    },
+    "sessionOrder": {
+        "dynamic": {
+            "url": "https://us-central1-json-form-63252.cloudfunctions.net/getSessionOrder",
+            "orders": [[0, 1], [1, 0], [0]]
+        }
+    },
+    "sessions": [
+        {
+            "timeLimit": 180,
+            "questions": [
+                {
+                    "content": [
+                        { "text": "# Test form\n## Session 1" },
+                        { "text": "#### This form has the email as an unique field." },
+                        {
+                            "text": "This means that submissions with repeated email will be recorded in a duplicates collection."
+                        },
+                        {
+                            "answer": {
+                                "id": "email",
+                                "required": true,
+                                "type": { "short": { "placeholder": "your email" } }
+                            }
+                        },
+                        { "text": "#### The name is not required" },
+                        {
+                            "answer": {
+                                "id": "name",
+                                "required": false,
+                                "type": { "long": { "placeholder": "your name" } }
+                            }
+                        },
+                        { "text": "#### A single question may collect multiple data." }
+                    ]
+                },
+                {
+                    "content": [
+                        {
+                            "text": "## Another question\n\n#### Supported answer formats\n- Short text\n- Long text\n- Multi choice\n- Likert scale"
+                        },
+                        {
+                            "answer": {
+                                "id": "multi",
+                                "required": false,
+                                "type": { "multi": { "options": ["bad", "good", "regular"] } }
+                            }
+                        },
+                        { "text": "#### You can change the amount of options." },
+                        {
+                            "answer": {
+                                "id": "likert",
+                                "required": true,
+                                "type": {
+                                    "likert": { "first": "completely disagree", "last": "completely agree", "size": 9 }
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "questions": [
+                {
+                    "content": [
+                        { "text": "## Session 3\n### You can import videos from youtube." },
+                        { "video": "https://www.youtube.com/embed/Uhhw6Jw295o" },
+                        { "text": "##### And put around the text or questions." },
+                        {
+                            "answer": {
+                                "id": "age",
+                                "required": true,
+                                "type": { "short": { "placeholder": "your age" } }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "content": [
+                        { "text": "## This section has no time limit, but the elapsed time is still recorded." }
+                    ]
+                }
+            ]
+        }
+    ]
+}
