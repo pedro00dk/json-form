@@ -66,7 +66,7 @@
         "question": {
             "description": "A may contain text, videos and elements to record respondents answers.",
             "properties": {
-                "contents": {
+                "content": {
                     "description": "The collection of elements that compose a question.",
                     "type": "array",
                     "items": { "$ref": "#/definitions/content" }

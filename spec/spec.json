@@ -1,4 +1,5 @@
 {
+    "$schema": "https://raw.githubusercontent.com/pedro00dk/json-form/master/schema/schema.json",
     "submission": {
         "url": "https://us-central1-json-form-63252.cloudfunctions.net/acceptSubmission",
         "uniqueAnswer": "email"
@@ -13,7 +14,7 @@
         {
             "timeLimit": 180,
             "questions": [
-                {
+                { 
                     "content": [
                         { "text": "# Test form\n## Session 1" },
                         { "text": "#### This form has the email as an unique field." },
