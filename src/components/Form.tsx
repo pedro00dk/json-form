@@ -21,6 +21,7 @@ export const Form = (props: { url: string }) => {
     const answers = React.useRef<{ [id: string]: string }>({})
     const times = React.useRef<{ [session: string]: number }>({})
     const resolvedSessionOrder = React.useRef<number[]>([])
+    const remainingSessionOrder = React.useRef<number[]>([])
     const [currentSession, setCurrentSession] = React.useState(undefined)
     const { submission, sessionOrder, sessions = [] } = form ?? {}
 
@@ -84,7 +85,8 @@ export const Form = (props: { url: string }) => {
                 )
                 if (uniqueIndices.length !== resolvedSessionOrder.current.length)
                     throw new Error(`Invalid session order, repeated indices.\n${resolvedSessionOrder.current}`)
-                setCurrentSession(resolvedSessionOrder.current.shift())
+                remainingSessionOrder.current = [...resolvedSessionOrder.current]
+                setCurrentSession(remainingSessionOrder.current.shift())
                 setLoaded(true)
             } catch (error) {
                 setInfo(`${info}\n\nError in session order resolution\n\n${error.toString()}\n\n`)
@@ -95,14 +97,14 @@ export const Form = (props: { url: string }) => {
     const next = (sessionAnswers: { [id: string]: string }, sessionTime: number) => {
         answers.current = { ...answers.current, ...sessionAnswers }
         times.current[currentSession] = sessionTime
-        setCurrentSession(resolvedSessionOrder.current.shift())
+        setCurrentSession(remainingSessionOrder.current.shift())
     }
 
     return (
         <div className={classes.container}>
             <div className={classes.content}>
                 {!loaded && <Info info={info} />}
-                {loaded && currentSession == undefined && sessions.length === 0 && (
+                {loaded && currentSession == undefined && resolvedSessionOrder.current.length === 0 && (
                     <Info info={'## This form does not contain any sessions'} />
                 )}
                 {loaded && currentSession != undefined && (
