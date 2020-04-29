@@ -1,12 +1,12 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema",
     "properties": {
-        "submission": { "$ref": "definitions/submission" },
-        "sessionOrder": { "$ref": "definitions/sessionOrder" },
+        "submission": { "$ref": "#/definitions/submission" },
+        "sessionOrder": { "$ref": "#/definitions/sessionOrder" },
         "sessions": {
             "description": "The list of sessions that compose the form.",
             "type": "array",
-            "items": { "$ref": "definitions/session" }
+            "items": { "$ref": "#/definitions/session" }
         }
     },
     "required": ["submission", "sessions"],
@@ -59,7 +59,7 @@
                 "questions": {
                     "description": "The questions that compose a session.",
                     "type": "array",
-                    "items": { "$ref": "definitions/question" }
+                    "items": { "$ref": "#/definitions/question" }
                 }
             }
         },
@@ -69,7 +69,7 @@
                 "contents": {
                     "description": "The collection of elements that compose a question.",
                     "type": "array",
-                    "items": { "$ref": "definitions/content" }
+                    "items": { "$ref": "#/definitions/content" }
                 }
             }
         },
@@ -78,7 +78,7 @@
             "oneOf": [
                 { "properties": { "text": { "description": "A unit of markdown text.", "type": "string" } } },
                 { "properties": { "video": { "description": "A unit of video.", "type": "string" } } },
-                { "properties": { "answer": { "$ref": "definitions/answer" } } }
+                { "properties": { "answer": { "$ref": "#/definitions/answer" } } }
             ]
         },
         "answer": {
@@ -95,10 +95,10 @@
                 "type": {
                     "description": "The type of answer to be rendered.",
                     "oneOf": [
-                        { "properties": { "short": { "$ref": "definitions/shortAnswer" } } },
-                        { "properties": { "long": { "$ref": "definitions/longAnswer" } } },
-                        { "properties": { "multi": { "$ref": "definitions/multiAnswer" } } },
-                        { "properties": { "likert": { "$ref": "definitions/likertAnswer" } } }
+                        { "properties": { "short": { "$ref": "#/definitions/shortAnswer" } } },
+                        { "properties": { "long": { "$ref": "#/definitions/longAnswer" } } },
+                        { "properties": { "multi": { "$ref": "#/definitions/multiAnswer" } } },
+                        { "properties": { "likert": { "$ref": "#/definitions/likertAnswer" } } }
                     ]
                 }
             }
