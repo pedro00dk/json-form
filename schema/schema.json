@@ -75,7 +75,7 @@
         },
         "content": {
             "description": "A unit of content that composes a question. It can be markdown text, a video or a answer element.",
-            "oneOf": [
+            "anyOf": [
                 { "properties": { "text": { "description": "A unit of markdown text.", "type": "string" } } },
                 { "properties": { "video": { "description": "A unit of video.", "type": "string" } } },
                 { "properties": { "answer": { "$ref": "#/definitions/answer" } } }
@@ -94,7 +94,7 @@
                 },
                 "type": {
                     "description": "The type of answer to be rendered.",
-                    "oneOf": [
+                    "anyOf": [
                         { "properties": { "short": { "$ref": "#/definitions/shortAnswer" } } },
                         { "properties": { "long": { "$ref": "#/definitions/longAnswer" } } },
                         { "properties": { "multi": { "$ref": "#/definitions/multiAnswer" } } },
