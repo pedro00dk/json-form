@@ -23,14 +23,17 @@ export const loadForm = async (
             await onStep('Successfully read as JSON')
         } catch (error) {
             await 'Failed to read as JSON'
+            form = undefined
         }
     }
     if (form == undefined) {
         try {
-            form = YAML.parse(response)
+            form = YAML.parse(response, {})
             await onStep('Successfully read as YAML')
+            if (typeof form === 'string') throw new Error()
         } catch (error) {
             await onStep('Failed to read as YAML')
+            form = undefined
         }
     }
     if (form == undefined) return onError('Form content could not be read')
