@@ -1,3 +1,4 @@
+import { css } from 'emotion'
 import React from 'react'
 import ReactMarkdown from 'react-markdown'
 import * as spec from '../spec'
@@ -8,7 +9,8 @@ const classes = {
     split: 'd-flex border w-100 my-2',
     text: 'd-flex flex-column w-100',
     video: 'd-flex w-100',
-    markdown: 'd-flex flex-column'
+    markdown: 'd-flex flex-column',
+    image: `p-absolute w-100 ${css({ transition: 'transform 0.2s', ':hover': { transform: 'scale(1.5)' } })}`
 }
 
 export const Question = (props: {
@@ -36,7 +38,7 @@ export const Question = (props: {
 
 const Text = (props: { text: spec.Text }) => (
     <div className={classes.text}>
-        <ReactMarkdown source={props.text} escapeHtml={true} />
+        <ReactMarkdown source={props.text} renderers={{ image: Image }} />
     </div>
 )
 
@@ -52,3 +54,7 @@ const Video = (props: { video: spec.Video }) => {
 
     return <iframe ref={container$} className={classes.video} src={props.video} />
 }
+
+//
+
+const Image = (props: { src: string }) => <img src={props.src} className={classes.image} />
