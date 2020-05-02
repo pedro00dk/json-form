@@ -61,6 +61,7 @@ const Timer = (props: { timer: number; onElapsed: (elapsed: number) => void }) =
         const handler = setInterval(() => {
             elapsedTime.current = (Date.now() - startTime) / 1000
             props.onElapsed(elapsedTime.current)
+            if (props.timer <= 0) return
             const remaining = props.timer - elapsedTime.current
             const minutes = Math.abs(Math.trunc(remaining / 60))
             const seconds = Math.abs(Math.trunc(remaining % 60))

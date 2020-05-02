@@ -101,7 +101,7 @@ export const Form = (props: { url: string }) => {
                     <Session
                         key={currentSession}
                         session={form.sessions[currentSession]}
-                        submit={{ enabled: true, text: currentSession < form.sessions.length - 1 ? 'Next' : 'Submit' }}
+                        submit={{ enabled: true, text: remainingSessions.current.length > 0 ? 'Next' : 'Submit' }}
                         onSubmit={next}
                     />
                 ) : (
