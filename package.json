@@ -27,6 +27,7 @@
         "format": "shopt -s extglob globstar && prettier --config ./.prettierrc.json -c --write ./src/**/*.js* && shopt -u extglob globstar",
         "build": "rm docs/* && parcel build --no-cache --no-source-maps --public-url './' -d ./docs -- \"$npm_package_main\" # github actions requires local path ./ instead of root path /",
         "start": "{ [ \"$PORT\" ] || PORT=1234; } && parcel serve --no-cache -d ./dist/ -p \"$PORT\" -- \"$npm_package_main\"",
+        "test": "{ [ \"$PORT\" ] || PORT=1234; } && MODE=test parcel serve --no-cache -d ./dist/ -p \"$PORT\" -- \"$npm_package_main\"",
         "firebase-login": "firebase login --reauth",
         "firebase-init": "firebase init",
         "firebase-deploy": "firebase login && firebase deploy"
