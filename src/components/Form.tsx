@@ -12,7 +12,7 @@ const classes = {
 
 document.body.style.background = '#ede7f6'
 
-export const Form = (props: { url: string }) => {
+export const Form = (props: { url: string; form?: spec.Form }) => {
     const [form, setForm] = React.useState<spec.Form>()
     const [info, setInfo] = React.useState('')
     const [status, setStatus] = React.useState<
@@ -27,6 +27,8 @@ export const Form = (props: { url: string }) => {
     const times = React.useRef<{ [session: string]: number }>({})
 
     React.useEffect(() => {
+        console.log(props.form)
+        if (props.form != undefined) return setForm(props.form)
         const onStep = async (message: string) => await setInfo(`${info}\n\n${message}`)
         const onSuccess = async (form: spec.Form) => setForm(form)
         const onError = async (message: string) => {
