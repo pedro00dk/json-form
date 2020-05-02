@@ -16,10 +16,9 @@ export const Question = (props: {
     createAnswer: (id: string, required: boolean, ref$: HTMLDivElement) => void
     onAnswer: (id: string, answer: string) => void
 }) => {
-    const { content = [] } = props.question
     return (
         <div className={classes.container}>
-            {content.map((part, i) => (
+            {props.question.content.map((part, i) => (
                 <React.Fragment key={i}>
                     {i > 0 && <span className={classes.split} />}
                     {part.text != undefined ? (

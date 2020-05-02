@@ -66,7 +66,7 @@ const Long = (props: { long: spec.Long; onAnswer: (answer: string) => void }) =>
 }
 
 const Multi = (props: { multi: spec.Multi; onAnswer: (answer: string) => void }) => {
-    const { options = [] } = props.multi
+    const { options } = props.multi
     const group = React.useMemo(() => Math.random().toString(), [])
     return (
         <div className={classes.multi.container}>
@@ -89,7 +89,7 @@ const Multi = (props: { multi: spec.Multi; onAnswer: (answer: string) => void })
 }
 
 const Likert = (props: { likert: spec.Likert; onAnswer: (answer: string) => void }) => {
-    const { first = 'fully disagree', last = 'fully agree', size = 5 } = props.likert
+    const { first, last, size = 5 } = props.likert
     const group = React.useMemo(() => Math.random().toString(), [])
     return (
         <div className={classes.likert.container}>

@@ -14,7 +14,6 @@ export const Session = (props: {
     submit: { enabled: boolean; text: string }
     onSubmit: (answers: { [id: string]: string }, time: number) => void
 }) => {
-    const { questions = [], timeLimit = undefined } = props.session
     const answerTracker = React.useRef<{ [id: string]: { required: boolean; ref$: HTMLElement; answer: string } }>({})
     const timeTracker = React.useRef(0)
 
@@ -41,8 +40,8 @@ export const Session = (props: {
 
     return (
         <div className={classes.container}>
-            {timeLimit > 0 && <Timer timeLimit={timeLimit} onElapsed={e => (timeTracker.current = e)} />}
-            {questions.map((question, i) => (
+            <Timer timer={props.session.timer} onElapsed={e => (timeTracker.current = e)} />
+            {props.session.questions.map((question, i) => (
                 <Question key={i} question={question} createAnswer={createAnswer} onAnswer={onAnswer} />
             ))}
             {props.submit.enabled && (
@@ -52,7 +51,7 @@ export const Session = (props: {
     )
 }
 
-const Timer = (props: { timeLimit: number; onElapsed: (elapsed: number) => void }) => {
+const Timer = (props: { timer: number; onElapsed: (elapsed: number) => void }) => {
     const container$ = React.useRef<HTMLDivElement>()
     const elapsedTime = React.useRef(0)
 
@@ -62,17 +61,17 @@ const Timer = (props: { timeLimit: number; onElapsed: (elapsed: number) => void 
         const handler = setInterval(() => {
             elapsedTime.current = (Date.now() - startTime) / 1000
             props.onElapsed(elapsedTime.current)
-            const remaining = props.timeLimit - elapsedTime.current
+            const remaining = props.timer - elapsedTime.current
             const minutes = Math.abs(Math.trunc(remaining / 60))
             const seconds = Math.abs(Math.trunc(remaining % 60))
             const formattedTime = `${remaining < 0 ? '-' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`
-            const remainingLabel = minutes >= 0 ? 'remaining' : 'overtime (you can still submit)'
-            const percent = Math.max((remaining / props.timeLimit) * 100, 0)
+            const remainingLabel = remaining >= 0 ? 'remaining' : 'overtime (you can still submit)'
+            const percent = Math.max((remaining / props.timer) * 100, 0)
             container$.current.textContent = `${formattedTime} ${remainingLabel}`
             container$.current.style.background = `linear-gradient(1.8rad, orange ${percent}%, red ${percent}%)`
         }, 200)
         return () => clearInterval(handler)
     }, [])
 
-    return <div ref={container$} className={classes.timer} />
+    return props.timer > 0 && <div ref={container$} className={classes.timer} />
 }
