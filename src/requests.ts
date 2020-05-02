@@ -84,7 +84,6 @@ export const sendSubmission = async (
         const message = (await axios.post(submission.url, data)).data
         return onSuccess(`# Submission successful &#x1F49A;\n#### Your submission has been recorded.\n\n${message}`)
     } catch (error) {
-        console.log(error, error.toString(), error.stack)
         return onError(`# Submission failed &#x1F534;\n#### Contact the form provider.\n\n${error.toString()}`)
     }
 }
