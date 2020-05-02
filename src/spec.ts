@@ -1,20 +1,17 @@
 export type Form = {
     submission: {
         url: string
-        uniqueAnswer?: string
+        unique?: string
     }
-    sessionOrder?: {
-        static?: number[]
-        dynamic?: {
-            url: string
-            orders: number[][]
-        }
+    order: {
+        orders: number[][]
+        url?: string
     }
     sessions: Session[]
 }
 
 export type Session = {
-    timeLimit?: number
+    timer: number
     questions: Question[]
 }
 
