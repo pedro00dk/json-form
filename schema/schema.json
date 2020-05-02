@@ -2,7 +2,7 @@
     "$schema": "http://json-schema.org/draft-07/schema",
     "properties": {
         "submission": { "$ref": "#/definitions/submission" },
-        "order": { "$ref": "#/definitions/sessionOrder" },
+        "order": { "$ref": "#/definitions/order" },
         "sessions": {
             "description": "The list of sessions that compose the form.",
             "type": "array",
