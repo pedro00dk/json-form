@@ -55,7 +55,8 @@ sessions:
                   first: completely disagree
                   last: completely agree
                   size: 9
-  - questions:
+  - timer: 0
+    questions:
       - content:
           - text: |
               ## Session 3

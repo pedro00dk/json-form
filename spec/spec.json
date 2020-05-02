@@ -67,6 +67,7 @@
             ]
         },
         {
+            "timer": 0,
             "questions": [
                 {
                     "content": [
