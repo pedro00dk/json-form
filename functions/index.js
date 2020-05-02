@@ -132,7 +132,7 @@ const getLessFrequentOrder = async orders => {
     return lessFrequentOrder
 }
 
-exports.getSessionOrder = functions.https.onRequest((request, response) =>
+exports.getOrder = functions.https.onRequest((request, response) =>
     respondErrors(request, response, async () => {
         if (enableCors(request, response, '*', 'POST')) return
         const orders = request.body

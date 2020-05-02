@@ -9,7 +9,7 @@
             [0, 1],
             [1, 0]
         ],
-        "url": "https://us-central1-json-form-63252.cloudfunctions.net/getSessionOrder"
+        "url": "https://us-central1-json-form-63252.cloudfunctions.net/getOrder"
     },
     "sessions": [
         {
