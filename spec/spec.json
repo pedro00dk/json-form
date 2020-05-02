@@ -2,20 +2,18 @@
     "$schema": "https://raw.githubusercontent.com/pedro00dk/json-form/master/schema/schema.json",
     "submission": {
         "url": "https://us-central1-json-form-63252.cloudfunctions.net/acceptSubmission",
-        "uniqueAnswer": "email"
+        "unique": "email"
     },
-    "sessionOrder": {
-        "dynamic": {
-            "url": "https://us-central1-json-form-63252.cloudfunctions.net/getSessionOrder",
-            "orders": [
-                [0, 1],
-                [1, 0]
-            ]
-        }
+    "order": {
+        "orders": [
+            [0, 1],
+            [1, 0]
+        ],
+        "url": "https://us-central1-json-form-63252.cloudfunctions.net/getSessionOrder"
     },
     "sessions": [
         {
-            "timeLimit": 180,
+            "timer": 180,
             "questions": [
                 {
                     "content": [
