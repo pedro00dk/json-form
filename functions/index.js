@@ -86,9 +86,9 @@ exports.acceptSubmission = functions.https.onRequest((request, response) => {
             .send(
                 `Submission accepted.\n${
                     !isUnique
-                        ? 'A previous submission with the same answer for [' +
+                        ? 'A previous submission with the same answer for ' +
                           submission.unique +
-                          '] was already received. This submission is being saved as a duplicate.'
+                          ' was already received. This submission is being saved as a duplicate.'
                         : ''
                 }`
             )
