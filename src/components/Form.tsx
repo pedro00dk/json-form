@@ -47,6 +47,7 @@ export const Form = (props: { url: string; form?: spec.Form }) => {
             setCurrentSession(remainingSessions.current.shift())
             setInfo(order.current.length > 0 ? '' : '## This form does not contain any sessions')
             setStatus(order.current.length > 0 ? 'loaded' : 'failed')
+            window.scrollTo(0, 0)
         }
         const onError = async (message: string) => {
             setInfo(`${info}\n\n${message}`)
@@ -71,6 +72,7 @@ export const Form = (props: { url: string; form?: spec.Form }) => {
         times.current[currentSession] = sessionTime
         const nextSession = remainingSessions.current.shift()
         setCurrentSession(nextSession)
+        window.scrollTo(0, 0)
         if (nextSession == undefined) submit()
     }
 
