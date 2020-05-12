@@ -38,7 +38,7 @@ export const Question = (props: {
 
 const Text = (props: { text: spec.Text }) => (
     <div className={classes.text}>
-        <ReactMarkdown source={props.text} renderers={{ image: Image }} />
+        <ReactMarkdown source={props.text} renderers={{ image: Image, link: Link }} />
     </div>
 )
 
@@ -58,3 +58,9 @@ const Video = (props: { video: spec.Video }) => {
 //
 
 const Image = (props: { src: string }) => <img src={props.src} className={classes.image} />
+
+const Link = (props: { href: string; children: React.ReactNode }) => (
+    <a href={props.href} target='_blank' rel='noopener noreferrer'>
+        {props.children}
+    </a>
+)
