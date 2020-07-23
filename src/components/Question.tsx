@@ -71,7 +71,7 @@ const MarkdownText = (props: {
     }
     if (props.session.transform != undefined) {
         let sessionTransformFunc = undefined as (text: string, answers: { [id: string]: string }) => string
-        eval(`sessionTransformFunc = ${props.form.transform}`)
+        eval(`sessionTransformFunc = ${props.session.transform}`)
         processedText = sessionTransformFunc(processedText, props.answers)
     }
 
