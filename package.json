@@ -29,7 +29,7 @@
         "firebase:emulator": "firebase emulators:start",
         "firebase:deploy": "firebase deploy",
         "": "",
-        "build": "rm docs/* && parcel build --no-cache --no-source-maps --public-url './' -d ./docs -- \"$npm_package_main\" # github actions requires local path ./ instead of root path /",
+        "github:docs": "rm docs/* && parcel build --no-cache --no-source-maps --public-url './' -d ./docs -- \"$npm_package_main\" # github actions requires local path ./ instead of root path /",
         "start": "{ [ \"$PORT\" ] || PORT=1234; } && TESTING=false parcel serve --no-cache -d ./dist/ --port \"$PORT\" -- \"$npm_package_main\"",
         "test": "{ [ \"$PORT\" ] || PORT=1234; } && TESTING=true parcel serve --no-cache -d ./dist/ --port \"$PORT\" -- \"$npm_package_main\""
     }
