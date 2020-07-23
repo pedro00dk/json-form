@@ -5,18 +5,8 @@
     "engines": {
         "node": "10"
     },
-    "devDependencies": {
-        "firebase-functions-test": "0.2.1"
-    },
     "dependencies": {
-        "firebase-admin": "8.11.0",
-        "firebase-functions": "3.6.1"
-    },
-    "scripts": {
-        "serve": "cd ../ && npx firebase emulators:start --only functions",
-        "shell": "cd ../ && npx firebase functions:shell",
-        "start": "cd ../ npm run shell",
-        "deploy": "cd ../ && npx firebase deploy --only functions",
-        "logs": "cd ../ && npx firebase functions:log"
+        "firebase-admin": "9.0.0",
+        "firebase-functions": "3.8.0"
     }
 }
