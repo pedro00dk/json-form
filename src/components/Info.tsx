@@ -1,8 +1,17 @@
 import React from 'react'
-import * as spec from '../spec'
+import * as schema from '../schema'
 import { Session } from './Session'
 
-export const Info = (props: { info: string }) => {
-    const session: spec.Session = { timer: 0, questions: [{ content: [{ text: props.info }] }] }
-    return <Session session={session} submit={{ enabled: false, text: '' }} onSubmit={() => {}} />
+export const Info = (props: { markdown: string; form: schema.Form }) => {
+    const session: schema.Session = { questions: [{ content: [{ markdownText: props.markdown }] }] }
+    return (
+        <Session
+            form={props.form}
+            session={session}
+            resources={{}}
+            answers={{}}
+            next={{ enabled: false, text: '' }}
+            onNext={() => {}}
+        />
+    )
 }

@@ -1,7 +1,7 @@
 import { css } from 'emotion'
 import React from 'react'
-import { loadForm, loadOrder, sendSubmission } from '../requests'
-import * as spec from '../spec'
+import { fetchForm, fetchGroupsFrequencies, fetchResources, submitAnswers } from '../requests'
+import * as schema from '../schema'
 import { Info } from './Info'
 import { Session } from './Session'
 
@@ -12,49 +12,71 @@ const classes = {
 
 document.body.style.background = '#ede7f6'
 
-export const Form = (props: { url: string; form?: spec.Form }) => {
-    const [form, setForm] = React.useState<spec.Form>()
-    const [info, setInfo] = React.useState('')
+export const Form = (props: { url?: string; form?: schema.Form }) => {
     const [status, setStatus] = React.useState<
-        'loading' | 'loaded' | 'failed' | 'submitting' | 'submitted' | 'submitFailed'
+        'loading' | 'loaded' | 'failed' | 'submit' | 'submitFinished' | 'submitFailed'
     >('loading')
+    const infoRef = React.useRef('')
+    const [info, setInfo] = React.useState('')
+    const appendInfo = (text: string) => setInfo((infoRef.current = `${infoRef.current}\n\n${text}`))
     //
-    const order = React.useRef<number[]>()
-    const [currentSession, setCurrentSession] = React.useState(undefined)
+    const form = React.useRef<schema.Form>()
+    const resources = React.useRef<{ [name: string]: string }>()
+    const groupsFrequencies = React.useRef<{ [id: string]: number }>()
+    const group = React.useRef<string>('')
+    //
     const remainingSessions = React.useRef<number[]>()
+    const [currentSession, setCurrentSession] = React.useState(0)
     //
     const answers = React.useRef<{ [id: string]: string }>({})
     const times = React.useRef<{ [session: string]: number }>({})
+    //
 
+    // effect that fetches all resources, show all logs and preset loaded state
     React.useEffect(() => {
-        console.log(props.form)
-        if (props.form != undefined) return setForm(props.form)
-        const onStep = async (message: string) => await setInfo(`${info}\n\n${message}`)
-        const onSuccess = async (form: spec.Form) => setForm(form)
-        const onError = async (message: string) => {
-            setInfo(`${info}\n\n${message}`)
-            setStatus('failed')
-        }
-        loadForm(props.url, onStep, onSuccess, onError)
+        ;(async () => {
+            await setStatus('loading')
+            await appendInfo('# Loading form content.')
+            try {
+                form.current = props.form
+                if (form == undefined)
+                    for await (const message of fetchForm(props.url, f => (form.current = f))) await appendInfo(message)
+                for await (const message of fetchResources(form.current, r => (resources.current = r)))
+                    await appendInfo(message)
+                for await (const message of fetchGroupsFrequencies(form.current, o => (groupsFrequencies.current = o)))
+                    await appendInfo(message)
+                const candidateOrders = Object.entries(groupsFrequencies.current)
+                    .filter(([name, _]) => form.current.groups.names[name] != undefined)
+                    .reduce(
+                        (acc, next) => (next[1] < acc[0][1] ? [next] : next[1] === acc[0][1] ? [...acc, next] : acc),
+                        [[undefined as string, Infinity] as const]
+                    )
+                await appendInfo('candidate orders')
+                await appendInfo(`\`\`\`json\n${JSON.stringify(candidateOrders, undefined, 4)}\n\`\`\``)
+                group.current = candidateOrders[Math.floor(Math.random() * candidateOrders.length)][0]
+                await appendInfo(`selected order: ${group.current}`)
+                await appendInfo(`order: ${JSON.stringify(form.current.groups.names[group.current])}`)
+                remainingSessions.current = form.current.groups.names[group.current]
+                console.log(groupsFrequencies.current, group.current, remainingSessions.current)
+                for (const sessionIndex of remainingSessions.current) {
+                    if (sessionIndex < 0 || sessionIndex >= form.current.sessions.length)
+                        throw new Error(
+                            `order name (${group.current}) contains session index out of range (${sessionIndex}). ` +
+                                `They must be in the range [0, ${form.current.sessions.length})`
+                        )
+                }
+                await setCurrentSession(remainingSessions.current.shift())
+                await setStatus('loaded')
+            } catch (error) {
+                await appendInfo(error.toString())
+                await setStatus('failed')
+            }
+        })()
     }, [])
 
     React.useEffect(() => {
-        if (form == undefined) return
-        const onStep = async (message: string) => await setInfo(`${info}\n\n${message}`)
-        const onSuccess = async (chosen: number[]) => {
-            order.current = [...chosen]
-            remainingSessions.current = [...order.current]
-            setCurrentSession(remainingSessions.current.shift())
-            setInfo(order.current.length > 0 ? '' : '## This form does not contain any sessions')
-            setStatus(order.current.length > 0 ? 'loaded' : 'failed')
-            window.scrollTo(0, 0)
-        }
-        const onError = async (message: string) => {
-            setInfo(`${info}\n\n${message}`)
-            setStatus('failed')
-        }
-        loadOrder(form.order, form.sessions, onStep, onSuccess, onError)
-    }, [form])
+        window.scrollTo(0, 0)
+    }, [status])
 
     React.useEffect(() => {
         window.onbeforeunload = (event: BeforeUnloadEvent) =>
@@ -62,54 +84,55 @@ export const Form = (props: { url: string; form?: spec.Form }) => {
                 ? 'The form is still loading.'
                 : status === 'loaded'
                 ? 'Your filled data will be lost.'
-                : status === 'submitting'
+                : status === 'submit'
                 ? 'Please wait until the submission confirmation.'
                 : undefined
     })
 
-    const next = (sessionAnswers: { [id: string]: string }, sessionTime: number) => {
+    const next = (sessionAnswers: { [id: string]: string }, time: number) => {
         answers.current = { ...answers.current, ...sessionAnswers }
-        times.current[currentSession] = sessionTime
+        times.current[currentSession] = time
         const nextSession = remainingSessions.current.shift()
         setCurrentSession(nextSession)
-        window.scrollTo(0, 0)
         if (nextSession == undefined) submit()
     }
 
     const submit = async () => {
-        const onStep = async (message: string) => {
-            setInfo(message)
-            await setStatus('submitting')
-        }
-        const onSuccess = async (message: string) => {
-            setInfo(message)
-            setStatus('submitted')
-        }
-        const onError = async (message: string) => {
-            setInfo(message)
-            setStatus('submitFailed')
-        }
         const data = {
             answers: answers.current,
             times: times.current,
-            order: order.current,
-            ...(form.submission.unique != undefined ? { unique: form.submission.unique } : {})
+            group: group.current,
+            ...(form.current.submission.uniqueAnswer != undefined
+                ? { uniqueAnswer: form.current.submission.uniqueAnswer }
+                : {})
         }
-        sendSubmission(form.submission, data, onStep, onSuccess, onError)
+        try {
+            await setStatus('submit')
+            infoRef.current = ''
+            const submitter = submitAnswers(form.current, data)
+            for await (const message of submitter) await appendInfo(message)
+            await setStatus('submitFinished')
+        } catch (error) {
+            await appendInfo(error.toString())
+            await setStatus('submitFailed')
+        }
     }
-
+    console.log(currentSession, remainingSessions.current)
     return (
         <div className={classes.container}>
             <div className={classes.content}>
-                {status === 'loaded' ? (
-                    <Session
-                        key={currentSession}
-                        session={form.sessions[currentSession]}
-                        submit={{ enabled: true, text: remainingSessions.current.length > 0 ? 'Next' : 'Submit' }}
-                        onSubmit={next}
-                    />
+                {status !== 'loaded' ? (
+                    <Info form={form.current} markdown={info} />
                 ) : (
-                    <Info info={info} />
+                    <Session
+                        key={Math.random()}
+                        form={form.current}
+                        session={form.current.sessions[currentSession]}
+                        resources={resources.current}
+                        answers={{ ...answers.current }}
+                        next={{ enabled: true, text: remainingSessions.current.length > 0 ? 'Next' : 'Submit' }}
+                        onNext={next}
+                    />
                 )}
             </div>
         </div>
