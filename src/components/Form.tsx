@@ -39,7 +39,7 @@ export const Form = (props: { url?: string; form?: schema.Form }) => {
             await appendInfo('# Loading form content.')
             try {
                 form.current = props.form
-                if (form == undefined)
+                if (form.current == undefined)
                     for await (const message of fetchForm(props.url, f => (form.current = f))) await appendInfo(message)
                 for await (const message of fetchResources(form.current, r => (resources.current = r)))
                     await appendInfo(message)
@@ -76,7 +76,7 @@ export const Form = (props: { url?: string; form?: schema.Form }) => {
 
     React.useEffect(() => {
         window.scrollTo(0, 0)
-    }, [status])
+    }, [status, currentSession])
 
     React.useEffect(() => {
         window.onbeforeunload = (event: BeforeUnloadEvent) =>
@@ -117,7 +117,7 @@ export const Form = (props: { url?: string; form?: schema.Form }) => {
             await setStatus('submitFailed')
         }
     }
-    console.log(currentSession, remainingSessions.current)
+
     return (
         <div className={classes.container}>
             <div className={classes.content}>

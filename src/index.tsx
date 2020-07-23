@@ -9,7 +9,7 @@ const test = process.env['TESTING'] === 'true'
 const url = window.location.hash.substring(1)
 
 console.log('testing mode:', test)
-console.log('test form:', testForm)
+console.log('test form:', test ? testForm : undefined)
 console.log('hash url:', url)
 
 ReactDom.render(
