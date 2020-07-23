@@ -1,0 +1,78 @@
+resources:
+  resourceFile: https://raw.githubusercontent.com/pedro00dk/json-form/master/test/resource.md
+
+submission:
+  url: https://us-central1-json-form-63252.cloudfunctions.net/submitAnswers
+  uniqueAnswer: email
+
+groups:
+  url: https://us-central1-json-form-63252.cloudfunctions.net/getGroupsFrequencies
+  names:
+    group1:
+      - 0
+      - 1
+    group2:
+      - 1
+      - 0
+
+transform: |
+  // form transform function (applied to all markdown texts and resources)
+  function formTransform(text) {
+      // anything can be used to transform the markdown text
+      return text + '\n\n### text appended from form transform function'
+  }
+
+sessions:
+  #
+  #
+  - transform: |
+      // session transform function (applied to session markdown texts and resources)
+      function formTransform(text, answers) {
+          // anything can be used to transform the markdown text
+          // you can also access previous answers in session transformers ({[id: string]}: string)
+          return text + '\n\n### text appended from session transform function'
+      }
+    questions:
+      - content:
+          - markdownText: |
+              ### Markdown Text
+
+              Loaded directly from form.
+
+          - input:
+              id: email
+              required: true
+              type:
+                short:
+                  placeholder: Email address
+
+          - input:
+              id: options
+              required: true
+              type:
+                multi:
+                  options:
+                    - option 1
+                    - option 2
+                    - option 3
+  #
+  #
+  - timer: 60
+    questions:
+      - content:
+          - markdownResource: resourceFile
+
+          - input:
+              id: text
+              type:
+                long:
+                  placeholder: long text placeholder
+
+          - input:
+              id: likert
+              required: true
+              type:
+                likert:
+                  first: from text
+                  last: to text
+                  size: 5
