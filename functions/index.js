@@ -55,27 +55,26 @@ exports.getGroupsFrequencies = functions.https.onRequest((request, response) => 
     })
 })
 
-exports.submitAnswer = functions.https.onRequest((request, response) => {
+exports.submitAnswers = functions.https.onRequest((request, response) => {
     respondErrors(request, response, async () => {
         if (enableCors(request, response, '*', 'POST')) return
         const submission = request.body
         validateSubmission(submission)
         const isUnique = await checkUniqueSubmission(submission)
         await db.collection(isUnique ? 'submissions' : 'duplicates').add(submission)
-        if (isUnique)
+        if (isUnique) {
             await db
                 .collection('groups')
                 .doc(submission.group)
-                .update({ frequency: firebase.firestore.FieldValue.increment(1) })
-        if (isUnique && submission.uniqueAnswer != undefined)
+                .set({ frequency: firebase.firestore.FieldValue.increment(1) }, { merge: true })
+        }
+        if (isUnique && submission.answers[submission.uniqueAnswer] != undefined) {
+            let uniqueAnswerValue = submission.answers[submission.uniqueAnswer].trim().toLowerCase()
             await db
                 .collection('uniques')
                 .doc('uniques')
-                .update({
-                    uniques: firebase.firestore.FieldValue.arrayUnion(
-                        submission.answers[submission.unique].trim().toLowerCase()
-                    )
-                })
+                .set({ uniques: firebase.firestore.FieldValue.arrayUnion(uniqueAnswerValue) }, { merge: true })
+        }
         response
             .status(200)
             .send(
@@ -110,12 +109,13 @@ const validateSubmission = submission => {
 }
 
 const checkUniqueSubmission = async submission => {
-    const uniqueAnswer = submission.uniqueAnswer
-    if (uniqueAnswer == undefined) return true
-    const uniqueAnswerValue = submission.answers[unique] ? submission.answers[unique].trim().toLowerCase() : undefined
+    if (submission.uniqueAnswer == undefined) return true
+    const uniqueAnswerValue = submission.answers[submission.uniqueAnswer]
+        ? submission.answers[submission.uniqueAnswer].trim().toLowerCase()
+        : undefined
     const uniquesDocument = await db.collection('uniques').doc('uniques').get()
-    let submittedUniquesArray = uniquesDocument.data().unique
-    submittedUniquesArray = submittedUniquesArray != undefined ? submittedUniquesArray : []
+    const submittedUniquesDocument = uniquesDocument.data()
+    submittedUniquesArray = submittedUniquesDocument != undefined ? submittedUniquesDocument.uniques : []
     let isUnique = true
     submittedUniquesArray.forEach(
         submittedUniqueAnswerValue => (isUnique = isUnique && submittedUniqueAnswerValue !== uniqueAnswerValue)
