@@ -1,16 +1,18 @@
 import '@babel/polyfill' // regeneratorRuntime
 import React from 'react'
 import ReactDom from 'react-dom'
-import testSpec from '../spec/test.yaml'
+import testForm from '../test/test.yaml'
 import { Form } from './components/Form'
-import * as spec from './spec'
+import * as schema from './schema'
 
-const init = async () => {
-    const url = window.location.hash.substring(1)
-    ReactDom.render(
-        <Form url={url} form={(process.env['MODE'] == 'test' ? testSpec : undefined) as spec.Form} />,
-        document.getElementById('root')
-    )
-}
+const test = process.env['TESTING'] === 'true'
+const url = window.location.hash.substring(1)
 
-init()
+console.log('testing mode:', test)
+console.log('test form:', testForm)
+console.log('hash url:', url)
+
+ReactDom.render(
+    <Form url={url.length > 0 ? url : undefined} form={(test ? testForm : undefined) as schema.Form} />,
+    document.getElementById('root')
+)
