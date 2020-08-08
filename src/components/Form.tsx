@@ -6,7 +6,7 @@ import { Info } from './Info'
 import { Session } from './Session'
 
 const classes = {
-    container: 'd-flex justify-content-center vw-100',
+    container: `d-flex justify-content-center ${css({width: '99vw'})}`,
     content: `d-flex flex-column m-4 ${css({ width: 640 })}`
 }
 
